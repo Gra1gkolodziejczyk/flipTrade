@@ -1,7 +1,7 @@
 type User = {
   id: string;
   email: string;
-  hashedPassword: string;
+  password: string;
   username: string;
   createdAt: Date;
   updatedAt: Date;
