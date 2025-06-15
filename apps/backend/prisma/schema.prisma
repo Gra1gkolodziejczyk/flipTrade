@@ -8,11 +8,86 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum TradeType {
+  BUY
+  SELL
+}
+
+enum TradeResult {
+  WIN
+  LOSS
+  BREAK_EVEN
+}
+
+enum Devise {
+  EUR_USD
+  BTC_USD
+  XAUUSD
+}
+
+enum PenisSize {
+  SMALL
+  AVERAGE
+  LARGE
+  EXTRA_LARGE
+  GRAIG_SIZE
+}
+
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  password  String
-  username  String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id         String       @id @default(uuid())
+  email      String       @unique
+  password   String
+  username   String       @unique
+  firstname  String?
+  lastname   String?
+  avatar     String?
+  penis_size PenisSize?
+  balance    Int          @default(0)
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  Trade      Trade[]
+  Statistics Statistics[]
+}
+
+model Trade {
+  id          String      @id @default(uuid())
+  userId      String
+  devise      Devise
+  type        TradeType
+  entry_price Float
+  exit_price  Float?
+  stop_loss   Float?
+  take_profit Float?
+  rr          Float?
+  result      TradeResult
+  comment     String?
+  gain        Float?
+  loss        Float?
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  user        User        @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
+}
+
+model Statistics {
+  id           String   @id @default(uuid())
+  userId       String
+  startDate    DateTime
+  endDate      DateTime
+  total_trades Int      @default(0)
+  win_rate     Float    @default(0.0)
+  avgRR        Float    @default(0.0)
+  totalGainRR  Float    @default(0.0)
+  totalLossRR  Float    @default(0.0)
+  totalGain    Float    @default(0.0)
+  totalLoss    Float    @default(0.0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([createdAt])
 }
