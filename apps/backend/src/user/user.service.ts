@@ -6,10 +6,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class UserService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getMyProfile(userId: string): Promise<User | null> {
+  async getMyProfile(userId: string): Promise<Omit<User, 'password'> | null> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,
+      },
+      omit: {
+        password: true,
       },
     });
     return user;
@@ -18,7 +21,7 @@ export class UserService {
   async updateMyProfile(
     userId: string,
     data: Partial<User>,
-  ): Promise<User | null> {
+  ): Promise<Omit<User, 'password'> | null> {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data,
@@ -26,10 +29,10 @@ export class UserService {
     return user;
   }
 
-  async deleteMyProfile(userId: string): Promise<User | null> {
-    const user = await this.prisma.user.delete({
+  async deleteMyProfile(userId: string): Promise<String> {
+    await this.prisma.user.delete({
       where: { id: userId },
     });
-    return user;
+    return 'User deleted successfully';
   }
 }

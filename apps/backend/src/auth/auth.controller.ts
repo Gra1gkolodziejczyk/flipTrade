@@ -20,7 +20,9 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(@Body() registerDto: RegisterDto): Promise<User> {
+  async register(
+    @Body() registerDto: RegisterDto,
+  ): Promise<Omit<User, 'password'>> {
     return this.authService.register(registerDto);
   }
 }

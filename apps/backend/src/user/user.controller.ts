@@ -9,30 +9,32 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from 'src/types/user.type';
-import { LocalAuthGuard } from 'src/auth/guards/local-auth.guard';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getMyProfile(@Param('id') id: string): Promise<User | null> {
+  async getMyProfile(
+    @Param('id') id: string,
+  ): Promise<Omit<User, 'password'> | null> {
     return this.userService.getMyProfile(id);
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async updateMyProfile(
     @Param('id') id: string,
     @Body() data: Partial<User>,
-  ): Promise<User | null> {
+  ): Promise<Omit<User, 'password'> | null> {
     return this.userService.updateMyProfile(id, data);
   }
 
-  @UseGuards(LocalAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteMyProfile(@Param('id') id: string): Promise<User | null> {
+  async deleteMyProfile(@Param('id') id: string): Promise<String> {
     return this.userService.deleteMyProfile(id);
   }
 }
