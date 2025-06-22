@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { Trade } from 'src/types/user.type';
+import { CreateTradeDto, UpdateTradeDto } from 'src/types/allTypes.type';
+import { calculateTradeResult } from 'src/utils/trade.utils';
 
 @Injectable()
 export class TradeService {
@@ -35,25 +36,32 @@ export class TradeService {
     });
   }
 
-  async createTrade(userId: string, data: Trade) {
+  async createTrade(userId: string, data: CreateTradeDto) {
+    let result = data.result;
+    
+    if (data.exit_price !== undefined) {
+      result = calculateTradeResult(data.type, data.entry_price, data.exit_price);
+    }
+    
     return this.prisma.trade.create({
       data: {
         ...data,
         userId,
+        result,
       },
     });
   }
 
-  async updateTrade(id: string, data: Trade) {
+  async updateTrade(id: string, data: UpdateTradeDto, userId: string) {
     return this.prisma.trade.update({
-      where: { id },
+      where: { id, userId },
       data,
     });
   }
 
-  async deleteTrade(id: string) {
+  async deleteTrade(id: string, userId: string) {
     return this.prisma.trade.delete({
-      where: { id },
+      where: { id, userId },
     });
   }
 }

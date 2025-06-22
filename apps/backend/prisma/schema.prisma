@@ -9,8 +9,8 @@ datasource db {
 }
 
 enum TradeType {
-  BUY
-  SELL
+  LONG
+  SHORT
 }
 
 enum TradeResult {
