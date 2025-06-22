@@ -42,7 +42,7 @@ model User {
   lastname   String?
   avatar     String?
   penis_size PenisSize?
-  balance    Int          @default(0)
+  balance    Float        @default(0.0)
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt
   Trade      Trade[]
