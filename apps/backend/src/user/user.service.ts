@@ -25,6 +25,9 @@ export class UserService {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data,
+      omit: {
+        password: true,
+      },
     });
     return user;
   }
