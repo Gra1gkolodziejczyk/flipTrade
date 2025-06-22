@@ -38,11 +38,11 @@ export class TradeService {
 
   async createTrade(userId: string, data: CreateTradeDto) {
     let result = data.result;
-    
+
     if (data.exit_price !== undefined) {
       result = calculateTradeResult(data.type, data.entry_price, data.exit_price);
     }
-    
+
     return this.prisma.trade.create({
       data: {
         ...data,

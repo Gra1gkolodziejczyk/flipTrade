@@ -10,7 +10,7 @@ export function calculateTradeResult(
   } else if (tradeType === TradeType.SHORT) {
     return exitPrice < entryPrice ? TradeResult.WIN : TradeResult.LOSS;
   }
-  
+
   // Par défaut, retourner LOSS si le type n'est pas reconnu
   return TradeResult.LOSS;
-} 
+}

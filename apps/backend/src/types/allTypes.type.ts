@@ -58,7 +58,59 @@ type CreateTradeDto = {
   loss?: GLfloat;
 };
 
+type StatisticsByRR = {
+  rr: number;
+  totalTrades: number;
+  wins: number;
+  losses: number;
+  winRate: number;
+  totalGain: number;
+  totalLoss: number;
+  netResult: number;
+}
+
+type GlobalStatistics = {
+  totalTrades: number;
+  wins: number;
+  losses: number;
+  breakEven: number;
+  winRate: number;
+  lossRate: number;
+  breakEvenRate: number;
+  totalGain: number;
+  totalLoss: number;
+  netResult: number;
+  avgGainPerWin: number;
+  avgLossPerLoss: number;
+  profitFactor: number; // Total gains / Total losses
+  bestTrade: number;
+  worstTrade: number;
+  avgTradeResult: number;
+  consecutiveWins: number;
+  consecutiveLosses: number;
+  maxDrawdown: number;
+  recoveryFactor: number;
+}
+
+type DeviseStatistics = {
+  devise: string;
+  totalTrades: number;
+  winRate: number;
+  totalGain: number;
+  totalLoss: number;
+  netResult: number;
+}
+
+type TradeTypeStatistics = {
+  type: TradeType;
+  totalTrades: number;
+  winRate: number;
+  totalGain: number;
+  totalLoss: number;
+  netResult: number;
+}
+
 // DTO pour mettre à jour un trade (tous les champs optionnels sauf les identifiants)
 type UpdateTradeDto = Partial<Omit<Trade, 'id' | 'userId' | 'createdAt' | 'updatedAt'>>;
 
-export type { User, Trade, JwtUser, CreateTradeDto, UpdateTradeDto };
+export type { User, Trade, JwtUser, CreateTradeDto, UpdateTradeDto, StatisticsByRR, GlobalStatistics, DeviseStatistics, TradeTypeStatistics };

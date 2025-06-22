@@ -27,7 +27,7 @@ export class TradeController {
   @Get(':id')
   async getTradeById(
     @Param('id') id: string,
-    @CurrentUser() user: JwtUser
+    @CurrentUser() user: JwtUser,
   ) {
     return this.tradeService.getTradeById(user.userId, id);
   }
@@ -36,7 +36,7 @@ export class TradeController {
   @Post()
   async createTrade(
     @Body() data: CreateTradeDto,
-    @CurrentUser() user: JwtUser
+    @CurrentUser() user: JwtUser,
   ) {
     return this.tradeService.createTrade(user.userId, data);
   }
@@ -46,7 +46,7 @@ export class TradeController {
   async updateTrade(
     @Param('id') id: string,
     @Body() data: UpdateTradeDto,
-    @CurrentUser() user: JwtUser
+    @CurrentUser() user: JwtUser,
   ) {
     return this.tradeService.updateTrade(id, data, user.userId);
   }
@@ -55,7 +55,7 @@ export class TradeController {
   @Delete(':id')
   async deleteTrade(
     @Param('id') id: string,
-    @CurrentUser() user: JwtUser
+    @CurrentUser() user: JwtUser,
   ) {
     return this.tradeService.deleteTrade(id, user.userId);
   }
