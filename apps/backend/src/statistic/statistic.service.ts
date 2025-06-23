@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { TradeResult, TradeType } from '../../generated/prisma';
-import { DeviseStatistics, GlobalStatistics, StatisticsByRR, TradeTypeStatistics } from 'src/types/allTypes.type';
+import { Trade, TradeResult, TradeType } from '../../generated/prisma';
+import {
+  DeviseStatistics,
+  GlobalStatistics,
+  StatisticsByRR,
+  TradeTypeStatistics,
+} from 'src/types/allTypes.type';
 
 @Injectable()
 export class StatisticService {
@@ -20,26 +25,30 @@ export class StatisticService {
       return this.getEmptyStatistics();
     }
 
-    const wins = trades.filter(t => t.result === TradeResult.WIN);
-    const losses = trades.filter(t => t.result === TradeResult.LOSS);
-    const breakEven = trades.filter(t => t.result === TradeResult.BREAK_EVEN);
+    const wins = trades.filter((t) => t.result === TradeResult.WIN);
+    const losses = trades.filter((t) => t.result === TradeResult.LOSS);
+    const breakEven = trades.filter((t) => t.result === TradeResult.BREAK_EVEN);
 
     const totalGain = wins.reduce((sum, t) => sum + (t.gain || 0), 0);
-    const totalLoss = Math.abs(losses.reduce((sum, t) => sum + (t.loss || 0), 0));
+    const totalLoss = Math.abs(
+      losses.reduce((sum, t) => sum + (t.loss || 0), 0),
+    );
     const netResult = totalGain - totalLoss;
 
     const avgGainPerWin = wins.length > 0 ? totalGain / wins.length : 0;
     const avgLossPerLoss = losses.length > 0 ? totalLoss / losses.length : 0;
 
-    const profitFactor = totalLoss > 0 ? totalGain / totalLoss : totalGain > 0 ? Infinity : 0;
+    const profitFactor =
+      totalLoss > 0 ? totalGain / totalLoss : totalGain > 0 ? Infinity : 0;
 
-    const bestTrade = Math.max(...trades.map(t => t.gain || 0));
-    const worstTrade = Math.min(...trades.map(t => t.loss || 0));
+    const bestTrade = Math.max(...trades.map((t) => t.gain || 0));
+    const worstTrade = Math.min(...trades.map((t) => t.loss || 0));
     const avgTradeResult = netResult / trades.length;
 
     const consecutiveStats = this.calculateConsecutiveStats(trades);
     const maxDrawdown = this.calculateMaxDrawdown(trades);
-    const recoveryFactor = maxDrawdown !== 0 ? netResult / Math.abs(maxDrawdown) : 0;
+    const recoveryFactor =
+      maxDrawdown !== 0 ? netResult / Math.abs(maxDrawdown) : 0;
 
     return {
       totalTrades: trades.length,
@@ -90,23 +99,27 @@ export class StatisticService {
       return acc;
     }, {} as Record<number, typeof trades>);
 
-    return Object.entries(groupedByRR).map(([rr, rrTrades]) => {
-      const wins = rrTrades.filter(t => t.result === TradeResult.WIN);
-      const losses = rrTrades.filter(t => t.result === TradeResult.LOSS);
-      const totalGain = wins.reduce((sum, t) => sum + (t.gain || 0), 0);
-      const totalLoss = Math.abs(losses.reduce((sum, t) => sum + (t.loss || 0), 0));
+    return Object.entries(groupedByRR)
+      .map(([rr, rrTrades]) => {
+        const wins = rrTrades.filter((t) => t.result === TradeResult.WIN);
+        const losses = rrTrades.filter((t) => t.result === TradeResult.LOSS);
+        const totalGain = wins.reduce((sum, t) => sum + (t.gain || 0), 0);
+        const totalLoss = Math.abs(
+          losses.reduce((sum, t) => sum + (t.loss || 0), 0),
+        );
 
-      return {
-        rr: parseFloat(rr),
-        totalTrades: rrTrades.length,
-        wins: wins.length,
-        losses: losses.length,
-        winRate: (wins.length / rrTrades.length) * 100,
-        totalGain,
-        totalLoss,
-        netResult: totalGain - totalLoss,
-      };
-    }).sort((a, b) => a.rr - b.rr);
+        return {
+          rr: parseFloat(rr),
+          totalTrades: rrTrades.length,
+          wins: wins.length,
+          losses: losses.length,
+          winRate: (wins.length / rrTrades.length) * 100,
+          totalGain,
+          totalLoss,
+          netResult: totalGain - totalLoss,
+        };
+      })
+      .sort((a, b) => a.rr - b.rr);
   }
 
   /**
@@ -130,9 +143,13 @@ export class StatisticService {
     }, {} as Record<string, typeof trades>);
 
     return Object.entries(groupedByDevise).map(([devise, deviseTrades]) => {
-      const wins = deviseTrades.filter(t => t.result === TradeResult.WIN);
+      const wins = deviseTrades.filter((t) => t.result === TradeResult.WIN);
       const totalGain = wins.reduce((sum, t) => sum + (t.gain || 0), 0);
-      const totalLoss = Math.abs(deviseTrades.filter(t => t.result === TradeResult.LOSS).reduce((sum, t) => sum + (t.loss || 0), 0));
+      const totalLoss = Math.abs(
+        deviseTrades
+          .filter((t) => t.result === TradeResult.LOSS)
+          .reduce((sum, t) => sum + (t.loss || 0), 0),
+      );
 
       return {
         devise,
@@ -148,7 +165,9 @@ export class StatisticService {
   /**
    * Calcule les statistiques par type de trade (LONG/SHORT)
    */
-  async getStatisticsByTradeType(userId: string): Promise<TradeTypeStatistics[]> {
+  async getStatisticsByTradeType(
+    userId: string,
+  ): Promise<TradeTypeStatistics[]> {
     const trades = await this.prisma.trade.findMany({
       where: { userId },
     });
@@ -166,9 +185,13 @@ export class StatisticService {
     }, {} as Record<TradeType, typeof trades>);
 
     return Object.entries(groupedByType).map(([type, typeTrades]) => {
-      const wins = typeTrades.filter(t => t.result === TradeResult.WIN);
+      const wins = typeTrades.filter((t) => t.result === TradeResult.WIN);
       const totalGain = wins.reduce((sum, t) => sum + (t.gain || 0), 0);
-      const totalLoss = Math.abs(typeTrades.filter(t => t.result === TradeResult.LOSS).reduce((sum, t) => sum + (t.loss || 0), 0));
+      const totalLoss = Math.abs(
+        typeTrades
+          .filter((t) => t.result === TradeResult.LOSS)
+          .reduce((sum, t) => sum + (t.loss || 0), 0),
+      );
 
       return {
         type: type as TradeType,
@@ -184,7 +207,9 @@ export class StatisticService {
   /**
    * Trouve le meilleur RR basé sur le taux de réussite
    */
-  async getBestRRByWinRate(userId: string): Promise<{ rr: number; winRate: number; totalTrades: number } | null> {
+  async getBestRRByWinRate(
+    userId: string,
+  ): Promise<{ rr: number; winRate: number; totalTrades: number } | null> {
     const statisticsByRR = await this.getStatisticsByRR(userId);
 
     if (statisticsByRR.length === 0) {
@@ -192,7 +217,9 @@ export class StatisticService {
     }
 
     // Filtrer les RR qui ont au moins 5 trades pour avoir des données significatives
-    const significantRR = statisticsByRR.filter(stat => stat.totalTrades >= 5);
+    const significantRR = statisticsByRR.filter(
+      (stat) => stat.totalTrades >= 5,
+    );
 
     if (significantRR.length === 0) {
       return null;
@@ -206,7 +233,9 @@ export class StatisticService {
   /**
    * Trouve le meilleur RR basé sur le profit net
    */
-  async getBestRRByProfit(userId: string): Promise<{ rr: number; netResult: number; totalTrades: number } | null> {
+  async getBestRRByProfit(
+    userId: string,
+  ): Promise<{ rr: number; netResult: number; totalTrades: number } | null> {
     const statisticsByRR = await this.getStatisticsByRR(userId);
 
     if (statisticsByRR.length === 0) {
@@ -214,7 +243,9 @@ export class StatisticService {
     }
 
     // Filtrer les RR qui ont au moins 5 trades pour avoir des données significatives
-    const significantRR = statisticsByRR.filter(stat => stat.totalTrades >= 5);
+    const significantRR = statisticsByRR.filter(
+      (stat) => stat.totalTrades >= 5,
+    );
 
     if (significantRR.length === 0) {
       return null;
@@ -228,7 +259,10 @@ export class StatisticService {
   /**
    * Calcule les statistiques de wins/losses consécutifs
    */
-  private calculateConsecutiveStats(trades: any[]): { maxConsecutiveWins: number; maxConsecutiveLosses: number } {
+  private calculateConsecutiveStats(trades: Trade[]): {
+    maxConsecutiveWins: number;
+    maxConsecutiveLosses: number;
+  } {
     let maxConsecutiveWins = 0;
     let maxConsecutiveLosses = 0;
     let currentConsecutiveWins = 0;
@@ -238,11 +272,17 @@ export class StatisticService {
       if (trade.result === TradeResult.WIN) {
         currentConsecutiveWins++;
         currentConsecutiveLosses = 0;
-        maxConsecutiveWins = Math.max(maxConsecutiveWins, currentConsecutiveWins);
+        maxConsecutiveWins = Math.max(
+          maxConsecutiveWins,
+          currentConsecutiveWins,
+        );
       } else if (trade.result === TradeResult.LOSS) {
         currentConsecutiveLosses++;
         currentConsecutiveWins = 0;
-        maxConsecutiveLosses = Math.max(maxConsecutiveLosses, currentConsecutiveLosses);
+        maxConsecutiveLosses = Math.max(
+          maxConsecutiveLosses,
+          currentConsecutiveLosses,
+        );
       } else {
         currentConsecutiveWins = 0;
         currentConsecutiveLosses = 0;
@@ -255,7 +295,7 @@ export class StatisticService {
   /**
    * Calcule le drawdown maximum
    */
-  private calculateMaxDrawdown(trades: any[]): number {
+  private calculateMaxDrawdown(trades: Trade[]): number {
     let peak = 0;
     let maxDrawdown = 0;
     let runningBalance = 0;
