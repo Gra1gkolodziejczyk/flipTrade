@@ -8,11 +8,15 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { TradeService } from './trade.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateTradeDto, UpdateTradeDto, JwtUser } from 'src/types/allTypes.type';
+import { JwtUser } from 'src/types/allTypes.type';
+import { CreateTradeDto, UpdateTradeDto } from './dto/trade.dto';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
+@ApiTags('Trades')
+@ApiBearerAuth()
 @Controller('trade')
 export class TradeController {
   constructor(private readonly tradeService: TradeService) {}
@@ -25,10 +29,7 @@ export class TradeController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getTradeById(
-    @Param('id') id: string,
-    @CurrentUser() user: JwtUser,
-  ) {
+  async getTradeById(@Param('id') id: string, @CurrentUser() user: JwtUser) {
     return this.tradeService.getTradeById(user.userId, id);
   }
 
@@ -53,10 +54,7 @@ export class TradeController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteTrade(
-    @Param('id') id: string,
-    @CurrentUser() user: JwtUser,
-  ) {
+  async deleteTrade(@Param('id') id: string, @CurrentUser() user: JwtUser) {
     return this.tradeService.deleteTrade(id, user.userId);
   }
 }
