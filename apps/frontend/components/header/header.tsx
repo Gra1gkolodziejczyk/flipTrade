@@ -3,22 +3,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import {
-  TrendingUp,
-  TrendingDown,
-  BarChart3,
-  Settings,
-  LogOut,
-  Sun,
-  Moon,
-  Menu,
-  X,
-  User,
-} from 'lucide-react';
+import { Settings, LogOut, Sun, Moon, User, Search, Bell } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
 export default function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -27,54 +15,88 @@ export default function Header() {
   };
 
   const navigationItems = [
-    { name: 'Dashboard', href: '/', icon: BarChart3 },
-    { name: 'Acheter', href: '/buy', icon: TrendingUp },
-    { name: 'Vendre', href: '/sell', icon: TrendingDown },
-    { name: 'Historique', href: '/history', icon: BarChart3 },
+    { name: 'Dashboard', href: '/', active: true },
+    { name: 'Trades', href: '/trades', active: false },
+    { name: 'Analytics', href: '/analytics', active: false },
+    { name: 'Settings', href: '/settings', active: false },
   ];
 
   return (
-    <header className="top-0 z-50 w-full border-b bg-white dark:bg-black">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          {/* Logo et nom de l'application */}
+    <header className="sticky top-0 z-50 w-full bg-gradient-to-r from-primary to-chart-1 text-primary-foreground shadow-lg">
+      <div className="container mx-auto px-6">
+        <div className="flex h-14 items-center justify-between">
+          {/* Logo et branding */}
           <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-purple-600 to-blue-600 text-white font-bold text-sm">
+            <div className="flex items-center space-x-3">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/20 backdrop-blur text-primary-foreground font-bold text-sm">
                 FT
               </div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
-                FlipTrade
-              </h1>
+              <div className="flex flex-col">
+                <h1 className="text-lg font-bold text-primary-foreground leading-tight">
+                  FlipTrade
+                </h1>
+                <span className="text-xs text-primary-foreground/70 font-medium leading-none">
+                  Trading Platform
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* Navigation desktop */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navigationItems.map(item => {
-              const Icon = item.icon;
-              return (
-                <Button
-                  key={item.name}
-                  variant="ghost"
-                  size="sm"
-                  className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </Button>
-              );
-            })}
+          {/* Navigation centrale */}
+          <nav className="hidden md:flex items-center space-x-8">
+            {navigationItems.map(item => (
+              <a
+                key={item.name}
+                href={item.href}
+                className={`text-sm font-medium transition-colors hover:text-primary-foreground/80 relative ${
+                  item.active
+                    ? 'text-primary-foreground'
+                    : 'text-primary-foreground/60'
+                }`}
+              >
+                {item.name}
+                {item.active && (
+                  <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary-foreground rounded-full"></div>
+                )}
+              </a>
+            ))}
           </nav>
 
           {/* Actions droite */}
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
+            {/* Recherche */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-lg w-8 h-8 hover:bg-white/10 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+            >
+              <Search className="h-4 w-4" />
+            </Button>
+
+            {/* Notifications */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="relative rounded-lg w-8 h-8 hover:bg-white/10 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
+            >
+              <Bell className="h-4 w-4" />
+              <div className="absolute -top-1 -right-1 w-2 h-2 bg-chart-4 rounded-full"></div>
+            </Button>
+
+            {/* Solde utilisateur */}
+            <div className="hidden sm:flex items-center space-x-2 px-3 py-1.5 bg-white/10 backdrop-blur border border-white/20 rounded-lg">
+              <div className="w-1.5 h-1.5 bg-chart-4 rounded-full"></div>
+              <span className="text-sm font-semibold text-primary-foreground">
+                €12,350.75
+              </span>
+            </div>
+
             {/* Toggle thème */}
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full w-9 h-9"
+              className="rounded-lg w-8 h-8 hover:bg-white/10 text-primary-foreground/80 hover:text-primary-foreground transition-colors"
             >
               {theme === 'dark' ? (
                 <Sun className="h-4 w-4" />
@@ -83,42 +105,62 @@ export default function Header() {
               )}
             </Button>
 
-            {/* Menu utilisateur */}
-            <div className="relative">
+            {/* Avatar et nom utilisateur */}
+            <div className="relative flex items-center space-x-2">
               <Button
                 variant="ghost"
-                size="icon"
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="rounded-full w-9 h-9"
+                className="flex items-center space-x-2 px-2 py-1 h-8 hover:bg-white/10 rounded-lg transition-colors"
               >
-                <Avatar className="h-7 w-7">
+                <Avatar className="h-6 w-6 border border-white/30">
                   <AvatarImage src="/avatar.jpg" alt="User" />
-                  <AvatarFallback>
-                    <User className="h-4 w-4 text-white dark:text-black" />
+                  <AvatarFallback className="bg-white/20 text-primary-foreground font-semibold text-xs">
+                    JD
                   </AvatarFallback>
                 </Avatar>
+                <span className="hidden sm:block text-sm font-medium text-primary-foreground">
+                  J. Doe
+                </span>
               </Button>
 
               {/* Dropdown menu utilisateur */}
               {isUserMenuOpen && (
-                <div className="absolute right-0 mt-2 w-48 rounded-lg bg-background border shadow-lg ring-1 ring-black ring-opacity-5">
+                <div className="absolute right-0 top-10 w-56 rounded-xl bg-popover border border-border shadow-lg ring-1 ring-black/5 animate-in slide-in-from-top-2">
+                  <div className="p-3 border-b border-border">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src="/avatar.jpg" alt="User" />
+                        <AvatarFallback className="bg-primary text-primary-foreground text-sm font-semibold">
+                          JD
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1">
+                        <p className="text-sm font-semibold text-popover-foreground">
+                          John Doe
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          john@example.com
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   <div className="py-1">
                     <a
                       href="/profile"
-                      className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-accent"
+                      className="flex items-center px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors rounded-lg mx-1"
                     >
-                      <User className="h-4 w-4 mr-3" />
-                      Profil
+                      <User className="h-4 w-4 mr-3 text-muted-foreground" />
+                      Mon Profil
                     </a>
                     <a
                       href="/settings"
-                      className="flex items-center px-4 py-2 text-sm text-foreground hover:bg-accent"
+                      className="flex items-center px-3 py-2 text-sm text-popover-foreground hover:bg-accent hover:text-accent-foreground transition-colors rounded-lg mx-1"
                     >
-                      <Settings className="h-4 w-4 mr-3" />
+                      <Settings className="h-4 w-4 mr-3 text-muted-foreground" />
                       Paramètres
                     </a>
-                    <div className="border-t my-1"></div>
-                    <button className="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-accent">
+                    <div className="border-t border-border my-1"></div>
+                    <button className="flex items-center w-full px-3 py-2 text-sm text-destructive hover:bg-destructive/10 transition-colors rounded-lg mx-1">
                       <LogOut className="h-4 w-4 mr-3" />
                       Déconnexion
                     </button>
@@ -126,43 +168,8 @@ export default function Header() {
                 </div>
               )}
             </div>
-
-            {/* Menu mobile */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden rounded-full w-9 h-9"
-            >
-              {isMenuOpen ? (
-                <X className="h-4 w-4" />
-              ) : (
-                <Menu className="h-4 w-4" />
-              )}
-            </Button>
           </div>
         </div>
-
-        {/* Menu mobile */}
-        {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
-            <nav className="flex flex-col space-y-2">
-              {navigationItems.map(item => {
-                const Icon = item.icon;
-                return (
-                  <Button
-                    key={item.name}
-                    variant="ghost"
-                    className="justify-start flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-accent transition-colors"
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{item.name}</span>
-                  </Button>
-                );
-              })}
-            </nav>
-          </div>
-        )}
       </div>
     </header>
   );

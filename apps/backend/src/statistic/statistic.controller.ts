@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { StatisticService } from './statistic.service';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { JwtUser } from 'src/types/allTypes.type';

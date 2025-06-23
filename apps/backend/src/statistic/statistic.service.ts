@@ -7,10 +7,11 @@ export class StatisticService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getAllMyStats(user: JwtUser) {
-    return this.prisma.statistics.findMany({
+    const stats = await this.prisma.statistics.findMany({
       where: {
         userId: user.userId,
       },
     });
+    return stats;
   }
 }

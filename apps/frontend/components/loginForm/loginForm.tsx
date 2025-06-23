@@ -14,7 +14,7 @@ export default function LoginForm() {
         <Card className="bg-white border-gray-200 shadow-xl dark:bg-gray-900 dark:border-gray-800">
           <CardHeader className="space-y-1 pb-6">
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-              Se connecter à son compte
+              Se connecter à FlipTrade
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
               Entrez votre email et votre mot de passe ci-dessous pour vous
