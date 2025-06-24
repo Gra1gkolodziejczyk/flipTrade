@@ -33,7 +33,7 @@ export class AuthService {
   async register(user: { email: string; username: string; password: string }) {
     if (!user.email || !user.username || !user.password) {
       throw new BadRequestException(
-        'Email, username and password are required',
+        "L'adresse email et le mot de passe sont obligatoires",
       );
     }
 
@@ -41,7 +41,9 @@ export class AuthService {
       where: { email: user.email },
     });
     if (existingUser) {
-      throw new BadRequestException('User already exists');
+      throw new BadRequestException(
+        "Il y a eu un problème lors de l'inscription",
+      );
     }
 
     const hashedPassword = await bcrypt.hash(user.password, 10);
