@@ -19,21 +19,16 @@ export default function RecentTrades() {
 
   const getPnLColor = (pnl: number) => {
     return pnl >= 0
-      ? 'text-green-600 dark:text-green-400'
-      : 'text-red-600 dark:text-red-400';
+      ? 'text-emerald-800 dark:text-emerald-800'
+      : 'text-amber-800 dark:text-amber-800';
   };
 
   return (
     <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
-          Last 10 Trades
+          Derniers trades
         </CardTitle>
-        <div className="flex items-center space-x-2">
-          <span className="px-2 py-1 text-xs font-medium text-blue-600 border border-blue-600 rounded">
-            Equity Graph
-          </span>
-        </div>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -41,19 +36,19 @@ export default function RecentTrades() {
             <TableHeader>
               <TableRow className="border-b border-gray-200 dark:border-gray-700">
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium">
-                  Entry Date
+                  Date d&apos;entrée
                 </TableHead>
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium">
-                  Exit Date
+                  Date de sortie
                 </TableHead>
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium">
-                  Instrument
+                  Devise
                 </TableHead>
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium">
-                  Type
+                  Type de trade
                 </TableHead>
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium">
-                  Result
+                  Résultat
                 </TableHead>
                 <TableHead className="text-gray-600 dark:text-gray-400 font-medium text-right">
                   P&L
@@ -79,8 +74,8 @@ export default function RecentTrades() {
                     <span
                       className={`px-2 py-1 text-xs font-medium border rounded ${
                         trade.type === 'Long'
-                          ? 'text-green-600 border-green-600'
-                          : 'text-red-600 border-red-600'
+                          ? 'text-emerald-800 border-emerald-800'
+                          : 'text-amber-800 border-amber-800'
                       }`}
                     >
                       {trade.type}
@@ -90,8 +85,8 @@ export default function RecentTrades() {
                     <span
                       className={`px-2 py-1 text-xs font-medium border rounded ${
                         trade.result === 'Profit'
-                          ? 'text-green-600 border-green-600'
-                          : 'text-red-600 border-red-600'
+                          ? 'text-emerald-800 border-emerald-800'
+                          : 'text-amber-800 border-amber-800'
                       }`}
                     >
                       {trade.result}

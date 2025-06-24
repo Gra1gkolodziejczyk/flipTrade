@@ -24,8 +24,8 @@ export const statsData = {
 };
 
 export const winRateData = [
-  { name: 'Winners', value: statsData.winners, color: '#22c55e' },
-  { name: 'Losers', value: statsData.losers, color: '#ef4444' },
+  { name: 'Winners', value: statsData.winners, color: '#065f46' },
+  { name: 'Losers', value: statsData.losers, color: '#92400e' },
 ];
 
 export type StatsData = typeof statsData;

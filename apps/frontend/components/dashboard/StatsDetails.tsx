@@ -28,7 +28,7 @@ export default function StatsDetails() {
             <div className="text-sm font-medium text-gray-900 dark:text-white">
               ${formatNumber(statsData.totalReturn)}
             </div>
-            <div className="text-xs text-green-600">
+            <div className="text-xs text-emerald-800">
               {formatPercent(statsData.totalReturnPercent)}
             </div>
           </div>
@@ -48,10 +48,10 @@ export default function StatsDetails() {
             Avg Winner
           </span>
           <div className="text-right">
-            <div className="text-sm font-medium text-green-600">
+            <div className="text-sm font-medium text-emerald-800">
               ${formatNumber(statsData.avgWinner)}
             </div>
-            <div className="text-xs text-green-600">
+            <div className="text-xs text-emerald-800">
               {formatPercent(statsData.avgWinnerPercent)}
             </div>
           </div>
@@ -62,10 +62,10 @@ export default function StatsDetails() {
             Avg Loser
           </span>
           <div className="text-right">
-            <div className="text-sm font-medium text-red-600">
+            <div className="text-sm font-medium text-amber-800">
               ${formatNumber(statsData.avgLoser)}
             </div>
-            <div className="text-xs text-red-600">
+            <div className="text-xs text-amber-800">
               {formatPercent(statsData.avgLoserPercent)}
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function StatsDetails() {
           <span className="text-sm text-gray-600 dark:text-gray-400">
             Max. Drawdown
           </span>
-          <div className="text-sm font-medium text-red-600">
+          <div className="text-sm font-medium text-amber-800">
             {formatPercent(statsData.maxDrawdown)}
           </div>
         </div>

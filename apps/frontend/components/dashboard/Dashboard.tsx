@@ -28,7 +28,7 @@ function DashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+    <div className="min-h-screen bg-gray-200 dark:bg-gray-950">
       <div className="container mx-auto px-4 py-6">
         <div className="mb-6 grid grid-cols-1 lg:grid-cols-4 gap-6">
           <div className="lg:col-span-1">

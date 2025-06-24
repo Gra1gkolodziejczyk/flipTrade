@@ -110,7 +110,7 @@ export default function Header() {
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                             Balance:{' '}
-                            <span className="font-medium">
+                            <span className="font-extrabold text-gray-900 dark:text-white">
                               {user?.balance?.toFixed(2) || '0.00'} €
                             </span>
                           </p>

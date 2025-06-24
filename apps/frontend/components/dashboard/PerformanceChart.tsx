@@ -64,10 +64,15 @@ export default function PerformanceChart() {
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke="#22c55e"
+                stroke="#065f46"
                 strokeWidth={2}
-                dot={{ fill: '#22c55e', strokeWidth: 2, r: 4 }}
-                activeDot={{ r: 6, stroke: '#22c55e', strokeWidth: 2 }}
+                dot={{
+                  fill: '#065f46',
+                  strokeWidth: 2,
+                  r: 4,
+                  stroke: '#065f46',
+                }}
+                activeDot={{ r: 6, stroke: '#065f46', strokeWidth: 2 }}
               />
             </LineChart>
           </ResponsiveContainer>

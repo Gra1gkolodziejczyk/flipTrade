@@ -7,24 +7,24 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { mockTradeData } from './data/mockTradeData';
 
 export default function ProfitCalendar() {
-  const [currentDate, setCurrentDate] = useState(new Date(2024, 0, 1));
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    'Janvier',
+    'Février',
+    'Mars',
+    'Avril',
+    'Mai',
+    'Juin',
+    'Juillet',
+    'Août',
+    'Septembre',
+    'Octobre',
+    'Novembre',
+    'Décembre',
   ];
 
-  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -86,9 +86,9 @@ export default function ProfitCalendar() {
       return 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400';
     }
     if (profit > 0) {
-      return 'bg-green-500 text-white';
+      return 'bg-emerald-800 dark:bg-emerald-800 text-white';
     } else {
-      return 'bg-red-500 text-white';
+      return 'bg-amber-800 dark:bg-amber-800 text-white';
     }
   };
 
@@ -118,7 +118,7 @@ export default function ProfitCalendar() {
               variant="outline"
               size="icon"
               onClick={previousMonth}
-              className="h-8 w-8"
+              className="h-8 w-8 text-gray-500 bg-white border border-gray-600 hover:bg-gray-100 hover:border-gray-700 hover:cursor-pointer hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:hover:text-gray-300"
             >
               <ChevronLeft className="h-4 w-4" />
             </Button>
@@ -126,7 +126,7 @@ export default function ProfitCalendar() {
               variant="outline"
               size="icon"
               onClick={nextMonth}
-              className="h-8 w-8"
+              className="h-8 w-8 text-gray-500 bg-white border border-gray-600 hover:bg-gray-100 hover:border-gray-700 hover:cursor-pointer hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:hover:text-gray-300"
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
@@ -188,13 +188,13 @@ export default function ProfitCalendar() {
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-green-500 rounded"></div>
+            <div className="w-4 h-4 bg-emerald-800 dark:bg-emerald-800 rounded"></div>
             <span className="text-sm text-gray-600 dark:text-gray-400">
               Profit
             </span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-4 h-4 bg-red-500 rounded"></div>
+            <div className="w-4 h-4 bg-amber-800 dark:bg-amber-800 rounded"></div>
             <span className="text-sm text-gray-600 dark:text-gray-400">
               Loss
             </span>
