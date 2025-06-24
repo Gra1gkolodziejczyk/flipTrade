@@ -65,6 +65,7 @@ export default function RegisterForm() {
                 Nom d&apos;utilisateur
               </Label>
               <Input
+                className="bg-gray-200 text-black selection:bg-gray-300 selection:text-black border border-gray-600 dark:text-white dark:border-gray-700 dark:selection:bg-gray-700 dark:selection:text-white"
                 id="username"
                 type="text"
                 required
@@ -81,6 +82,7 @@ export default function RegisterForm() {
                 Adresse email
               </Label>
               <Input
+                className="bg-gray-200 text-black selection:bg-gray-300 selection:text-black border border-gray-600 dark:text-white dark:border-gray-700 dark:selection:bg-gray-700 dark:selection:text-white"
                 id="email"
                 type="email"
                 required
@@ -100,6 +102,7 @@ export default function RegisterForm() {
                 </Label>
               </div>
               <Input
+                className="bg-gray-200 text-black selection:bg-gray-300 selection:text-black border border-gray-600 dark:text-white dark:border-gray-700 dark:selection:bg-gray-700 dark:selection:text-white"
                 id="password"
                 type="password"
                 placeholder="Entrez votre mot de passe"
@@ -133,7 +136,7 @@ export default function RegisterForm() {
 
               <Button
                 variant="outline"
-                className="w-full h-12 bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 dark:text-gray-300 dark:hover:text-white font-medium text-sm rounded-lg transition-all duration-200"
+                className="w-full h-12 hover:cursor-pointer bg-white hover:bg-gray-50 border-gray-200 text-gray-700 hover:text-gray-900 dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-gray-700 dark:text-gray-300 dark:hover:text-white font-medium text-sm rounded-lg transition-all duration-200"
               >
                 <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
                   <path

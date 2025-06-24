@@ -148,12 +148,12 @@ export default function Header() {
                 </>
               ) : (
                 <>
-                  <div className="hidden md:flex items-center space-x-2">
+                  <div className="hidden md:flex items-center space-x-3">
                     <Link href="/sign-in">
                       <Button
                         variant="ghost"
                         size="sm"
-                        className="text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                        className="text-gray-700 hover:cursor-pointer hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white dark:hover:border-gray-500 font-medium transition-all"
                       >
                         Se connecter
                       </Button>
@@ -161,7 +161,7 @@ export default function Header() {
                     <Link href="/sign-up">
                       <Button
                         size="sm"
-                        className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium"
+                        className="bg-primary hover:cursor-pointer text-white font-medium"
                       >
                         S&apos;inscrire
                       </Button>
@@ -250,11 +250,11 @@ export default function Header() {
                   </>
                 ) : (
                   <>
-                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-2">
+                    <div className="border-t border-gray-200 dark:border-gray-700 pt-4 space-y-3">
                       <Link href="/sign-in">
                         <Button
                           variant="ghost"
-                          className="w-full justify-start text-gray-700 dark:text-gray-200"
+                          className="w-full hover:cursor-pointer justify-center text-gray-700 hover:bg-gray-100 hover:text-gray-900 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-800 dark:hover:text-white font-medium transition-all"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           Se connecter
@@ -262,7 +262,7 @@ export default function Header() {
                       </Link>
                       <Link href="/sign-up">
                         <Button
-                          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white"
+                          className="w-full hover:cursor-pointer bg-primary text-white font-medium"
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
                           S&apos;inscrire
