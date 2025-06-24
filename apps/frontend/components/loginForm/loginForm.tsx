@@ -4,40 +4,37 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/lib/auth-provider';
 import Link from 'next/link';
-import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const { login, isAuthenticated } = useAuth();
+  const router = useRouter();
+
+  // Rediriger si déjà connecté
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
 
   const handleLogin = async () => {
     try {
       setError('');
-
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
-        {
-          method: 'POST',
-          body: JSON.stringify({ email, password }),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        setError(
-          data.message || 'Une erreur est survenue lors de la connexion',
-        );
-        return;
-      }
+      await login({ email, password });
+      // La redirection se fera automatiquement via useEffect
     } catch (error) {
       console.error('Erreur lors de la connexion:', error);
-      setError('Erreur de connexion. Veuillez réessayer.');
+      setError(
+        error instanceof Error
+          ? error.message
+          : 'Erreur de connexion. Veuillez réessayer.',
+      );
     }
   };
 
