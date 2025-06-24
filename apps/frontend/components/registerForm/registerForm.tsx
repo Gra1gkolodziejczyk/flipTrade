@@ -4,37 +4,41 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/lib/auth-provider';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
-export default function LoginForm() {
+export default function RegisterForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [username, setUsername] = useState('');
   const [error, setError] = useState('');
-  const { login, isAuthenticated } = useAuth();
-  const router = useRouter();
 
-  // Rediriger si déjà connecté
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated, router]);
-
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
       setError('');
-      await login({ email, password });
-      // La redirection se fera automatiquement via useEffect
-    } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
-      setError(
-        error instanceof Error
-          ? error.message
-          : 'Erreur de connexion. Veuillez réessayer.',
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        {
+          method: 'POST',
+          body: JSON.stringify({ username, email, password }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        },
       );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(
+          data.message || "Une erreur est survenue lors de l'inscription",
+        );
+        return;
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'inscription:", error);
+      setError("Erreur lors de l'inscription. Veuillez réessayer.");
     }
   };
 
@@ -44,15 +48,31 @@ export default function LoginForm() {
         <Card className="bg-white border-gray-200 shadow-xl dark:bg-gray-900 dark:border-gray-800">
           <CardHeader className="space-y-1 pb-6">
             <h1 className="text-2xl font-semibold text-gray-900 dark:text-white">
-              Se connecter à son compte
+              Créer un compte
             </h1>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              Entrez votre email et votre mot de passe ci-dessous pour vous
-              connecter à votre compte
+              Entrez votre nom d&apos;utilisateur, votre email et votre mot de
+              passe ci-dessous pour créer votre compte.
             </p>
           </CardHeader>
 
           <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label
+                htmlFor="username"
+                className="text-gray-700 dark:text-gray-300 text-sm font-medium"
+              >
+                Nom d&apos;utilisateur
+              </Label>
+              <Input
+                id="username"
+                type="text"
+                required
+                placeholder="John Doe"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+              />
+            </div>
             <div className="space-y-2">
               <Label
                 htmlFor="email"
@@ -78,12 +98,6 @@ export default function LoginForm() {
                 >
                   Mot de passe
                 </Label>
-                <Button
-                  variant="link"
-                  className="text-primary hover:text-primary/80 text-sm p-0 h-auto font-medium"
-                >
-                  Mot de passe oublié ?
-                </Button>
               </div>
               <Input
                 id="password"
@@ -101,9 +115,9 @@ export default function LoginForm() {
             <div className="space-y-3 pt-4">
               <Button
                 className="w-full cursor-pointer h-12 bg-primary hover:bg-primary/90 text-white font-medium text-sm rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
-                onClick={handleLogin}
+                onClick={handleRegister}
               >
-                Se connecter
+                S&apos;inscrire
               </Button>
 
               <div className="relative">
@@ -139,7 +153,7 @@ export default function LoginForm() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-                Se connecter avec Google
+                S&apos;inscrire avec Google
               </Button>
             </div>
           </CardContent>
@@ -147,13 +161,13 @@ export default function LoginForm() {
 
         <div className="flex items-center justify-center gap-2 mt-6">
           <p className="text-gray-600 dark:text-gray-400 text-sm">
-            Vous n&apos;avez pas de compte ?
+            Vous avez déjà un compte ?
           </p>
           <Link
-            href="/sign-up"
+            href="/sign-in"
             className="text-primary hover:text-primary/80 text-sm font-medium transition-colors duration-200"
           >
-            S&apos;inscrire
+            Se connecter
           </Link>
         </div>
       </div>
