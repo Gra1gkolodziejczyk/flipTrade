@@ -10,7 +10,11 @@ import {
 } from '@nestjs/common';
 import { TradeService } from './trade.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import { CreateTradeDto, UpdateTradeDto, JwtUser } from 'src/types/allTypes.type';
+import {
+  CreateTradeDto,
+  UpdateTradeDto,
+  JwtUser,
+} from 'src/types/allTypes.type';
 import { CurrentUser } from 'src/auth/decorators/user.decorator';
 
 @Controller('trade')
@@ -24,11 +28,20 @@ export class TradeController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('daily-summary')
+  async getDailyTradesSummary(@CurrentUser() user: JwtUser) {
+    return this.tradeService.getDailyTradesSummary(user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('win-loss-ratio')
+  async getWinLossRatio(@CurrentUser() user: JwtUser) {
+    return this.tradeService.getWinLossRatio(user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async getTradeById(
-    @Param('id') id: string,
-    @CurrentUser() user: JwtUser,
-  ) {
+  async getTradeById(@Param('id') id: string, @CurrentUser() user: JwtUser) {
     return this.tradeService.getTradeById(user.userId, id);
   }
 
@@ -53,10 +66,7 @@ export class TradeController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async deleteTrade(
-    @Param('id') id: string,
-    @CurrentUser() user: JwtUser,
-  ) {
+  async deleteTrade(@Param('id') id: string, @CurrentUser() user: JwtUser) {
     return this.tradeService.deleteTrade(id, user.userId);
   }
 }

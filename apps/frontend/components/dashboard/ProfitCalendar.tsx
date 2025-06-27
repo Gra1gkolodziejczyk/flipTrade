@@ -1,13 +1,25 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { mockTradeData } from './data/mockTradeData';
+import { useAuth } from '@/lib/auth-provider';
+
+interface DailySummary {
+  date: string;
+  isWin: boolean;
+  isLoss: boolean;
+  totalResult: number;
+  tradesCount: number;
+}
 
 export default function ProfitCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [dailySummaries, setDailySummaries] = useState<DailySummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { token, isAuthenticated } = useAuth();
 
   const monthNames = [
     'Janvier',
@@ -25,6 +37,44 @@ export default function ProfitCalendar() {
   ];
 
   const dayNames = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
+
+  const fetchDailySummaries = async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+
+      if (!token || !isAuthenticated) {
+        throw new Error('Utilisateur non authentifié');
+      }
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/trade/daily-summary`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Erreur lors du chargement des données');
+      }
+
+      const data: DailySummary[] = await response.json();
+      setDailySummaries(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erreur inconnue');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated && token) {
+      fetchDailySummaries();
+    }
+  }, [isAuthenticated, token]);
 
   const getDaysInMonth = (date: Date) => {
     const year = date.getFullYear();
@@ -73,12 +123,19 @@ export default function ProfitCalendar() {
 
   const getTradeData = (date: Date) => {
     const key = getDateKey(date);
-    return (
-      mockTradeData[key as keyof typeof mockTradeData] || {
+    const summary = dailySummaries.find(s => s.date === key);
+
+    if (!summary) {
+      return {
         profit: 0,
         trades: 0,
-      }
-    );
+      };
+    }
+
+    return {
+      profit: summary.totalResult,
+      trades: summary.tradesCount,
+    };
   };
 
   const getCellStyle = (profit: number, trades: number) => {
@@ -105,6 +162,36 @@ export default function ProfitCalendar() {
   };
 
   const days = getDaysInMonth(currentDate);
+
+  if (isLoading) {
+    return (
+      <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 h-full flex flex-col">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+            Calendrier des Profits
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <div className="text-gray-500 dark:text-gray-400">Chargement...</div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 h-full flex flex-col">
+        <CardHeader className="pb-4">
+          <CardTitle className="text-lg font-semibold text-gray-900 dark:text-white">
+            Calendrier des Profits
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex-1 flex items-center justify-center">
+          <div className="text-red-500">Erreur: {error}</div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 h-full flex flex-col">
