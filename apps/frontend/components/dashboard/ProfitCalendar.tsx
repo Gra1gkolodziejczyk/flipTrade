@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useAuth } from '@/lib/auth-provider';
+import { Loader2 } from 'lucide-react';
 
 interface DailySummary {
   date: string;
@@ -172,7 +173,7 @@ export default function ProfitCalendar() {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex items-center justify-center">
-          <div className="text-gray-500 dark:text-gray-400">Chargement...</div>
+          <Loader2 className="h-4 w-4 animate-spin" />
         </CardContent>
       </Card>
     );

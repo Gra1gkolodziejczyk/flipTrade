@@ -22,7 +22,7 @@ function DashboardContent() {
   if (!user) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950 flex items-center justify-center">
-        <Loader2 className="w-10 h-10 animate-spin" />
+        <Loader2 className="w-10 h-10 animate-spin text-black dark:text-white" />
       </div>
     );
   }

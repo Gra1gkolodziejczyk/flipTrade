@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useEffect, useState } from 'react';
 import { useAuth } from '@/lib/auth-provider';
+import { Loader2 } from 'lucide-react';
 
 interface WinLossData {
   winRatio: number;
@@ -88,7 +89,7 @@ export default function WinRateChart() {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col items-center justify-center flex-1 min-h-[240px]">
-          <div className="text-gray-500 dark:text-gray-400">Chargement...</div>
+          <Loader2 className="h-4 w-4 animate-spin text-black dark:text-white" />
         </CardContent>
       </Card>
     );
